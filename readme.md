@@ -16,12 +16,11 @@ Stencil components are just Web Components, so they work in any major framework 
 
 ## Getting Started
 
-To start building a new web component using Stencil, clone this repo to a new directory:
+To start developing on this repository:
 
 ```bash
-git clone https://github.com/ionic-team/stencil-component-starter.git my-component
-cd my-component
-git remote rm origin
+git clone https://github.com/Impostor-SC/covid-minigame.git
+cd covid-minigame
 ```
 
 and run:
