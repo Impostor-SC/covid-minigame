@@ -4,7 +4,7 @@
 
 Welcome to Covid Minigame web component! You can freely use this by embedding our component in your web project.
 
-# How to Use
+## How to Use
 
 There are three strategies we recommend for using web components built with Stencil.
 
