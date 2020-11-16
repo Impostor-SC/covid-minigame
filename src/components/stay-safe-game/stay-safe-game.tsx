@@ -55,7 +55,7 @@ export class StaySafeGame {
   }
 
   @Watch('level')
-  watchHandler(newValue: Number, oldValue: Number) {
+  watchHandler(newValue: number, oldValue: number) {
     console.log("Hi " + newValue) // DEBUG
     this.maze = generateMaze(newValue);
   }
