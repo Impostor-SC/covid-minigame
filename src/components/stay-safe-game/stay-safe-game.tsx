@@ -1,4 +1,4 @@
-import { Component, Host, Watch, h, State } from '@stencil/core';
+import { Component, Host, Watch, h, State, Prop } from '@stencil/core';
 import {
   generateMaze,
   moveAllEnemies,
@@ -16,9 +16,9 @@ import {
 })
 export class StaySafeGame {
 
-  @State() level: Number = 1;
+  @Prop() level: number;
   @State() isLoading: boolean = true;
-  @State() maze: Array< Array< String > > = null;
+  @State() maze: Array< Array< string > > = null;
 
   componentWillLoad() {
     console.log("Hi " + this.level) // DEBUG
@@ -51,7 +51,7 @@ export class StaySafeGame {
   }
 
   disconnectedCallback() {
-    document.getElementsByTagName('body')[0].removeEventListener("keyup", this.recordUserKeystroke)
+    document.getElementsByTagName('body')[0].removeEventListener("keyup", this.recordUserKeystroke);
   }
 
   @Watch('level')

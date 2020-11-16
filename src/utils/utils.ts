@@ -2,7 +2,7 @@ export function format(first: string, middle: string, last: string): string {
   return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '');
 }
 
-export function generateMaze(level: Number): Array< Array< String > > {
+export function generateMaze(level: Number): Array< Array< string > > {
   // TODO: Buat algoritma untuk Generate Maze
   return [
     ['#', '.', '.', '.', '#', '#'],
@@ -13,12 +13,12 @@ export function generateMaze(level: Number): Array< Array< String > > {
   ];
 }
 
-export function moveAllEnemies(maze: Array< Array< String > >): Array< Array< String > > {
+export function moveAllEnemies(maze: Array< Array< string > >): Array< Array< string > > {
   // TODO: Buat algoritma untuk gerakin musuh
   return maze;
 }
 
-function findPlayer(maze: Array< Array< String > >): any {
+function findPlayer(maze: Array< Array< string > >): any {
   // TODO: Buat algoritma untuk menemukan posisi Player
   return {
     "x": 5,
@@ -26,7 +26,7 @@ function findPlayer(maze: Array< Array< String > >): any {
   }
 }
 
-export function playerMoveRight(maze: Array< Array< String > >): any {
+export function playerMoveRight(maze: Array< Array< string > >): any {
   // TODO: Buat algoritma untuk gerakin player ke kanan
   return {
     "success": true,
@@ -34,7 +34,7 @@ export function playerMoveRight(maze: Array< Array< String > >): any {
   }
 }
 
-export function playerMoveLeft(maze: Array< Array< String > >): any {
+export function playerMoveLeft(maze: Array< Array< string > >): any {
   // TODO: Buat algoritma untuk gerakin player ke kiri
   return {
     "success": true,
@@ -42,7 +42,7 @@ export function playerMoveLeft(maze: Array< Array< String > >): any {
   }
 }
 
-export function playerMoveUp(maze: Array< Array< String > >): any {
+export function playerMoveUp(maze: Array< Array< string > >): any {
   // TODO: Buat algoritma untuk gerakin player ke atas
   return {
     "success": true,
@@ -50,7 +50,7 @@ export function playerMoveUp(maze: Array< Array< String > >): any {
   }
 }
 
-export function playerMoveDown(maze: Array< Array< String > >): any {
+export function playerMoveDown(maze: Array< Array< string > >): any {
   // TODO: Buat algoritma untuk gerakin player ke bawah
   return {
     "success": true,
@@ -58,7 +58,7 @@ export function playerMoveDown(maze: Array< Array< String > >): any {
   }
 }
 
-export function playerShoot(maze: Array< Array< String > >): any {
+export function playerShoot(maze: Array< Array< string > >): any {
   // TODO: Buat algoritma untuk tembak sabun
   return {
     "success": true,

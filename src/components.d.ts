@@ -7,6 +7,9 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface StaySafeGame {
+        "level": number;
+    }
+    interface StaySafeLauncher {
     }
 }
 declare global {
@@ -16,15 +19,26 @@ declare global {
         prototype: HTMLStaySafeGameElement;
         new (): HTMLStaySafeGameElement;
     };
+    interface HTMLStaySafeLauncherElement extends Components.StaySafeLauncher, HTMLStencilElement {
+    }
+    var HTMLStaySafeLauncherElement: {
+        prototype: HTMLStaySafeLauncherElement;
+        new (): HTMLStaySafeLauncherElement;
+    };
     interface HTMLElementTagNameMap {
         "stay-safe-game": HTMLStaySafeGameElement;
+        "stay-safe-launcher": HTMLStaySafeLauncherElement;
     }
 }
 declare namespace LocalJSX {
     interface StaySafeGame {
+        "level"?: number;
+    }
+    interface StaySafeLauncher {
     }
     interface IntrinsicElements {
         "stay-safe-game": StaySafeGame;
+        "stay-safe-launcher": StaySafeLauncher;
     }
 }
 export { LocalJSX as JSX };
@@ -32,6 +46,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "stay-safe-game": LocalJSX.StaySafeGame & JSXBase.HTMLAttributes<HTMLStaySafeGameElement>;
+            "stay-safe-launcher": LocalJSX.StaySafeLauncher & JSXBase.HTMLAttributes<HTMLStaySafeLauncherElement>;
         }
     }
 }
