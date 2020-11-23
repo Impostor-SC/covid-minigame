@@ -57,6 +57,7 @@ export class StaySafeGame {
         maze: this.maze
       }
     } else {
+      this.status = 0
       return
     }
 
