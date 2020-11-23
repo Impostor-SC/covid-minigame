@@ -1,4 +1,4 @@
-import { Component, Host, Watch, h, State, Prop } from '@stencil/core';
+import { Component, Host, Watch, h, State, Prop, getAssetPath } from '@stencil/core';
 import {
   generateMaze,
   moveAllEnemies,
@@ -13,6 +13,7 @@ import {
   tag: 'stay-safe-game',
   styleUrl: 'stay-safe-game.css',
   shadow: true,
+  assetsDirs: ['assets']
 })
 export class StaySafeGame {
 
@@ -60,6 +61,19 @@ export class StaySafeGame {
     this.maze = generateMaze(newValue);
   }
 
+  icon = { 
+    'P':'player.png',
+    '#':'wall.png',
+    'X':'enemy.png',
+    'F':'finish.png',
+    '.':'path.png'
+  }
+
+  displayEntity(name) {
+    return (
+      <img class="icon" src={getAssetPath(`./assets/${this.icon[name[0]]}`)} />
+      );
+  }
   render() {
     return (
       <Host>
@@ -71,7 +85,7 @@ export class StaySafeGame {
                 <tr key={idxRow}>
                   {row.map((cell, idxCell) => (
                     <td key={idxCell}>
-                      {cell}
+                      {this.displayEntity(cell)}
                     </td>
                   ))}
                 </tr>
