@@ -24,6 +24,7 @@ export class StaySafeGame {
   componentWillLoad() {
     console.log("Hi " + this.level) // DEBUG
     this.maze = generateMaze(this.level);
+    console.log(this.maze)
   }
 
   recordUserKeystroke(e: any) {
@@ -63,6 +64,7 @@ export class StaySafeGame {
 
   icon = { 
     'P':'player.png',
+    'S':'sister.png',
     '#':'wall.png',
     'X':'enemy.png',
     'F':'finish.png',
