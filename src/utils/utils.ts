@@ -96,6 +96,9 @@ export function generateMaze(level: number): Array< Array< string > > {
     else {
       let row = randomChoiceIndex(gameMaze)
       let col = randomChoiceIndex(gameMaze[row])
+      if (gameMaze[row][col] !== ".") {
+        continue
+      }
       gameMaze[row][col] = arrEntity[0]
       if (arrEntity[0] === "#" && pWall > 0) {
         pWall--
