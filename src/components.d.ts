@@ -10,6 +10,8 @@ export namespace Components {
     }
     interface StaySafeGame {
         "level": number;
+        "loseEvent": Function;
+        "winEvent": Function;
     }
     interface StaySafeLauncher {
     }
@@ -44,6 +46,8 @@ declare namespace LocalJSX {
     }
     interface StaySafeGame {
         "level"?: number;
+        "loseEvent"?: Function;
+        "winEvent"?: Function;
     }
     interface StaySafeLauncher {
     }
