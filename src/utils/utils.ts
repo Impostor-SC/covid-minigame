@@ -149,7 +149,7 @@ export function generateMaze(level: number): Array< Array< string > > {
   gameMaze = []
   for(let i = 0; i < height; i++) {
     let temp = []
-    for(let j = 0; j < (width + 2*numberOfEnemies - 1); j++) {
+    for(let j = 0; j < (width + 2*numberOfEnemies - 2); j++) {
       temp.push(".")
     }
     gameMaze.push(temp)
