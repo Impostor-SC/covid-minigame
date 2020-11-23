@@ -6,6 +6,7 @@ export class Position {
 let gameMaze: Array< Array< string > > = null
 let enemyDict: any = {}
 let numberOfEnemies = 0
+let sisterSaved = false
 
 function findEntity(maze: Array< Array< string > >, toFind: string): Position {
   let result = null
@@ -56,7 +57,9 @@ function generateHeuristics(maze: Array< Array< string > >) {
   return result
 }
 
-export function initEnemies() {
+export function initData() {
+  sisterSaved = false
+
   enemyDict = {}
   for (let i = 0; i < numberOfEnemies; ++i) {
     const enemyId = `X${i}`
@@ -74,8 +77,8 @@ function randomChoiceIndex(choices) {
   return index;
 }
 
-let arrEntity = ["X", "P", "F", "S", "#"]
 export function generateMaze(level: number): Array< Array< string > > {
+  let arrEntity = ["X", "P", "F", "S", "#"]
   numberOfEnemies = Math.floor((level + 4) / 5);
   let width = 10;
   let height = 7;
@@ -111,7 +114,7 @@ export function generateMaze(level: number): Array< Array< string > > {
   }
   
   // initEnemies()
-  return hideMazeFromPosition(gameMaze, findPlayer(gameMaze));
+  return hideMazeFromPosition(gameMaze, findPlayer());
   // return gameMaze;
 }
 
@@ -132,15 +135,15 @@ function updateHeuristics(enemyId: string, maze: Array< Array< string > >) {
 }
 
 export function moveAllEnemies(maze: Array< Array< string > >): Array< Array< string > > {
-  for (let i = 0; i < numberOfEnemies; ++i) {
-    const enemyId = `X${i}`
-    findEnemyBestMove(enemyId)
-    const newMaze = updateEnemyMaze(enemyId)
-    enemyDict[enemyId] = {
-      "maze": newMaze,
-      "heuristic": updateHeuristics(enemyId, newMaze)
-    }
-  }
+  // for (let i = 0; i < numberOfEnemies; ++i) {
+  //   const enemyId = `X${i}`
+  //   findEnemyBestMove(enemyId)
+  //   const newMaze = updateEnemyMaze(enemyId)
+  //   enemyDict[enemyId] = {
+  //     "maze": newMaze,
+  //     "heuristic": updateHeuristics(enemyId, newMaze)
+  //   }
+  // }
   return hideMazeFromPosition(gameMaze, findPlayer());
 }
 
@@ -148,18 +151,27 @@ function findPlayer(): Position {
   return findEntity(gameMaze, 'P')
 }
 
-function canMoveTo(pos: Position): boolean {
-  return pos.x >= 0 && pos.x < gameMaze.length && pos.y >= 0 && pos.y < gameMaze[0].length
+function canMoveTo(entityCode: string, pos: Position): number {
+  if (pos.x >= 0 && pos.x < gameMaze.length && pos.y >= 0 && pos.y < gameMaze[0].length) {
+    if (gameMaze[pos.x][pos.y] === ".") return 1
+    if (entityCode !== "P") return 0
+    if (gameMaze[pos.x][pos.y] === "S") return 2
+    if (gameMaze[pos.x][pos.y] === "F") return 3
+  }
+  return 0
 }
 
 function moveEntity(entityCode: string, toMove: Position): any {
   const playerPosition = findEntity(gameMaze, entityCode)
   playerPosition.x += toMove.x
   playerPosition.y += toMove.y
-  const moveSuccess = canMoveTo(playerPosition)
-  if (moveSuccess) {
-    gameMaze[playerPosition.x][playerPosition.y] = 'P'
+  const moveSuccess = canMoveTo(entityCode, playerPosition)
+  if (moveSuccess > 0 && (sisterSaved || moveSuccess !== 3)) {
+    gameMaze[playerPosition.x][playerPosition.y] = gameMaze[playerPosition.x - toMove.x][playerPosition.y - toMove.y]
     gameMaze[playerPosition.x - toMove.x][playerPosition.y - toMove.y] = '.'
+  }
+  if (moveSuccess === 2) {
+    sisterSaved = true
   }
   return {
     "success": moveSuccess,

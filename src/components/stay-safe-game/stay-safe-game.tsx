@@ -1,7 +1,7 @@
 import { Component, Host, Watch, h, State, Prop, getAssetPath } from '@stencil/core';
 import {
   generateMaze,
-  initEnemies,
+  initData,
   moveAllEnemies,
   playerMoveRight,
   playerMoveLeft,
@@ -19,16 +19,26 @@ import {
 export class StaySafeGame {
 
   @Prop() level: number;
+  @State() status: number = 0;
+  @State() health: number = 3;
+  @State() sisterSaved: boolean = false;
+  @Prop() winEvent: Function;
+  @Prop() loseEvent: Function;
   @State() isLoading: boolean = true;
   @State() maze: Array< Array< string > > = null;
 
   componentWillLoad() {
     console.log("Hi " + this.level) // DEBUG
     this.maze = generateMaze(this.level);
+    initData()
     console.log(this.maze)
+    console.log("HEYYYY")
   }
 
-  recordUserKeystroke(e: any) {
+  recordUserKeystroke = (e: any) => {
+    if (this.status !== 0) return
+    this.status = 1
+
     let ev = e.key || e.code;
     let moveResult: any = {};
     console.log(ev) // DEBUG
@@ -44,11 +54,21 @@ export class StaySafeGame {
       moveResult = playerShoot();
     }
 
-    console.log(moveResult)
-
-    if (moveResult.success) {
-      this.maze = moveAllEnemies(moveResult.maze);
+    if (moveResult.success > 0) {
+      if (moveResult.success === 2) {
+        this.sisterSaved = true
+        this.maze = moveResult.maze
+      } else if (moveResult.success === 3) {
+        if (this.sisterSaved) {
+          this.maze = moveResult.maze
+          this.winEvent()
+        }
+      } else {
+        this.maze = moveResult.maze
+      }
+      // this.maze = moveAllEnemies(moveResult.maze);
     }
+    this.status = 0
   }
 
   componentDidLoad() {
@@ -57,13 +77,6 @@ export class StaySafeGame {
 
   disconnectedCallback() {
     document.getElementsByTagName('body')[0].removeEventListener("keyup", this.recordUserKeystroke);
-  }
-
-  @Watch('level')
-  watchHandler(newValue: number, oldValue: number) {
-    console.log("Hi " + newValue) // DEBUG
-    initEnemies()
-    this.maze = generateMaze(newValue);
   }
 
   icon = { 
@@ -82,9 +95,13 @@ export class StaySafeGame {
       );
   }
   render() {
+    console.log(this.maze)
     return (
       <Host>
-        <h1 class="title">Stay Safe!</h1>
+        <div class="title">
+          <h1>Stay Safe!</h1>
+          <h3>Level: {this.level}, Health: {this.health}, Sister: {this.sisterSaved ? "Saved" : "-"}</h3>
+        </div>
         <div class="game-wrapper">
           {this.maze ?
             <table>

@@ -32,11 +32,17 @@ export class StaySafeLauncher {
             <button onClick={this.startGame}>Start</button>
           </div>
         : this.route === "winscreen" ?
-          <h2>You Win</h2>
+          <div style={{ textAlign: "center" }}>
+            <h2>You Win</h2>
+            <button onClick={this.startGame}>Continue</button>
+          </div>
         : this.route === "losescreen" ?
-          <h2>You Lose</h2>
+          <div style={{ textAlign: "center" }}>
+            <h2>You Lose</h2>
+            <button onClick={this.startGame}>Retry</button>
+          </div>
         :
-          <stay-safe-game level={this.level} />
+          <stay-safe-game level={this.level} winEvent={this.winLevel} loseEvent={this.loseLevel} />
         }
       </Host>
     );
