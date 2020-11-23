@@ -48,9 +48,49 @@ function hideMazeFromPosition(maze: Array< Array< string > >, position: Position
   const newMaze = JSON.parse(JSON.stringify(maze))
   for (let i = 0; i < maze.length; ++i) {
     for (let j = 0; j < maze[i].length; ++j) {
-      const distance = Math.abs(i - position.x) + Math.abs(j - position.y)
+      let a = i - position.x
+      let b = j - position.y
+      const distance = Math.abs(a) + Math.abs(b)
       if (distance > 2) {
         newMaze[i][j] = "-"
+      }
+      else if (distance == 2 ) {
+        try{
+
+          if(Math.abs(a) === 2 && Math.abs(b) === 0) {
+            if (a < 0 && maze[position.x - 1][j] === "#") {
+                newMaze[i][j] = "-"
+            }
+            else if (a > 0 && maze[position.x + 1][j] === "#") {
+                newMaze[i][j] = "-"
+            }
+          }
+          else if(Math.abs(a) === 0 && Math.abs(b) === 2) {
+            if (b < 0 && maze[i][position.y - 1] === "#") {
+                newMaze[i][j] = "-"
+            }
+            else if (b > 0 && maze[i][position.y + 1] === "#") {
+                newMaze[i][j] = "-"
+            }
+          }
+          else if(Math.abs(a) === 1 && Math.abs(b) === 1) {
+            if (a < 0 && b < 0 && maze[position.x - 1][position.y] === "#" && maze[position.x][position.y - 1] === "#") {
+                newMaze[i][j] = "-"
+            }
+            else if (a < 0 && b > 0 && maze[position.x - 1][position.y] === "#" && maze[position.x][position.y + 1] === "#") {
+              newMaze[i][j] = "-"
+            }
+            else if (a > 0 && b > 0 && maze[position.x][position.y + 1] === "#" && maze[position.x + 1][position.y] === "#") {
+              newMaze[i][j] = "-"
+            }
+            else if (a > 0 && b < 0 && maze[position.x + 1][position.y] === "#" && maze[position.x][position.y - 1] === "#") {
+              newMaze[i][j] = "-"
+            }
+          }
+        }
+        catch(err) {
+          continue
+        }
       }
     }
   }
@@ -109,7 +149,7 @@ export function generateMaze(level: number): Array< Array< string > > {
   gameMaze = []
   for(let i = 0; i < height; i++) {
     let temp = []
-    for(let j = 0; j < (width + 2*numberOfEnemies - 1); j++) {
+    for(let j = 0; j < (width + 2*numberOfEnemies - 2); j++) {
       temp.push(".")
     }
     gameMaze.push(temp)
