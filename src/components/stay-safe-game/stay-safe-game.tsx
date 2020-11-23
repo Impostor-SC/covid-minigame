@@ -68,7 +68,8 @@ export class StaySafeGame {
     '#':'wall.png',
     'X':'enemy.png',
     'F':'finish.png',
-    '.':'path.png'
+    '.':'path.png',
+    "-":'cover.png'
   }
 
   displayEntity(name) {
@@ -86,7 +87,7 @@ export class StaySafeGame {
               {this.maze.map((row, idxRow) => (
                 <tr key={idxRow}>
                   {row.map((cell, idxCell) => (
-                    <td key={idxCell}>
+                    <td key={idxCell} style={{ backgroundImage : `url(${getAssetPath(`./assets/path.png`)})` }}>
                       {this.displayEntity(cell)}
                     </td>
                   ))}
