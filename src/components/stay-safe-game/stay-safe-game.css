@@ -38,3 +38,8 @@ tr {
   height: 100%;
   display: block;
 }
+
+.game-info {
+  text-align: center;
+  padding-top: .5rem;
+}

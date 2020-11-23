@@ -1,7 +1,6 @@
-import { Component, Host, Watch, h, State, Prop, getAssetPath } from '@stencil/core';
+import { Component, Host, h, State, Prop, getAssetPath } from '@stencil/core';
 import {
   generateMaze,
-  initData,
   moveAllEnemies,
   playerMoveRight,
   playerMoveLeft,
@@ -20,6 +19,7 @@ export class StaySafeGame {
 
   @Prop() level: number;
   @State() status: number = 0;
+  @State() gameInfo: string = "Your turn"
   @State() health: number = 3;
   @State() sisterSaved: boolean = false;
   @Prop() winEvent: Function;
@@ -30,7 +30,6 @@ export class StaySafeGame {
   componentWillLoad() {
     console.log("Hi " + this.level) // DEBUG
     this.maze = generateMaze(this.level);
-    initData()
     console.log(this.maze)
     console.log("HEYYYY")
   }
@@ -52,6 +51,13 @@ export class StaySafeGame {
       moveResult = playerMoveDown();
     } else if (ev === "Enter") {
       moveResult = playerShoot();
+    } else if (ev === " ") {
+      moveResult = {
+        success: 1,
+        maze: this.maze
+      }
+    } else {
+      return
     }
 
     if (moveResult.success > 0) {
@@ -62,13 +68,37 @@ export class StaySafeGame {
         if (this.sisterSaved) {
           this.maze = moveResult.maze
           this.winEvent()
+        } else {
+          this.gameInfo = "You need to find your sister first"
+          this.status = 0
+          return
         }
       } else {
         this.maze = moveResult.maze
       }
-      // this.maze = moveAllEnemies(moveResult.maze);
+      this.gameInfo = "Enemy's turn"
+      this.status = 2
+      setTimeout(() => {
+        const moveResult = moveAllEnemies()
+        let moveTimeout = 100
+        if (moveResult.health < this.health) {
+          this.health = moveResult.health
+          this.gameInfo = "You are attacked"
+          moveTimeout = 1000
+        }
+        this.maze = moveResult.maze
+        setTimeout(() => {
+          if (this.health <= 0) {
+            this.loseEvent()
+          }
+          this.gameInfo = "Your turn"
+          this.status = 0
+        }, moveTimeout)
+      }, 1000)
+    } else {
+      this.gameInfo = "You can't go there"
+      this.status = 0
     }
-    this.status = 0
   }
 
   componentDidLoad() {
@@ -119,6 +149,7 @@ export class StaySafeGame {
             <h2>Loading...</h2>
           }
         </div>
+        <h3 class="game-info">{this.gameInfo}</h3>
       </Host>
     );
   }
