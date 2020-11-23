@@ -6,7 +6,27 @@ export class Position {
 let gameMaze: Array< Array< string > > = null
 let enemyDict: any = {}
 let numberOfEnemies = 0
-let sisterSaved = false
+let sisterSaved: boolean
+let playerHealth: number
+
+const directionList = [
+  {
+    x: 1,
+    y: 0
+  },
+  {
+    x: -1,
+    y: 0
+  },
+  {
+    x: 0,
+    y: 1
+  },
+  {
+    x: 0,
+    y: -1
+  }
+]
 
 function findEntity(maze: Array< Array< string > >, toFind: string): Position {
   let result = null
@@ -58,6 +78,7 @@ function generateHeuristics(maze: Array< Array< string > >) {
 }
 
 export function initData() {
+  playerHealth = 3
   sisterSaved = false
 
   enemyDict = {}
@@ -79,6 +100,7 @@ function randomChoiceIndex(choices) {
 
 export function generateMaze(level: number): Array< Array< string > > {
   let arrEntity = ["X", "P", "F", "S", "#"]
+  let enemyCounter = 0
   numberOfEnemies = Math.floor((level + 4) / 5);
   let width = 10;
   let height = 7;
@@ -104,7 +126,11 @@ export function generateMaze(level: number): Array< Array< string > > {
         continue
       }
       gameMaze[row][col] = arrEntity[0]
-      if (arrEntity[0] === "#" && pWall > 0) {
+      if (arrEntity[0] === 'X') {
+        gameMaze[row][col] += enemyCounter
+        enemyCounter += 1
+        arrEntity.splice(0, 1)
+      } else if (arrEntity[0] === "#" && pWall > 0) {
         pWall--
       }
       else {
@@ -113,38 +139,30 @@ export function generateMaze(level: number): Array< Array< string > > {
     }
   }
   
-  // initEnemies()
+  initData()
   return hideMazeFromPosition(gameMaze, findPlayer());
   // return gameMaze;
 }
 
 function findEnemyBestMove(enemyId: string) {
-  // TODO
-  // ubah value gameMaze
+  const chosenMove = directionList[Math.floor(Math.random() * 4)]
+  const moveResult = moveEntity(enemyId, chosenMove)
+  if (moveResult.success > 0) {
+    enemyDict[enemyId].maze = hideMazeFromPosition(gameMaze, findEntity(gameMaze, enemyId))
+  } else if (moveResult.success === -1) {
+    playerHealth -= 1
+  }
 }
 
-function updateEnemyMaze(enemyId: string) {
-  // TODO
-  return enemyDict[enemyId].maze
-}
-
-function updateHeuristics(enemyId: string, maze: Array< Array< string > >) {
-  // TODO
-  const currentHeuristic = enemyDict[enemyId].heuristic
-  return currentHeuristic
-}
-
-export function moveAllEnemies(maze: Array< Array< string > >): Array< Array< string > > {
-  // for (let i = 0; i < numberOfEnemies; ++i) {
-  //   const enemyId = `X${i}`
-  //   findEnemyBestMove(enemyId)
-  //   const newMaze = updateEnemyMaze(enemyId)
-  //   enemyDict[enemyId] = {
-  //     "maze": newMaze,
-  //     "heuristic": updateHeuristics(enemyId, newMaze)
-  //   }
-  // }
-  return hideMazeFromPosition(gameMaze, findPlayer());
+export function moveAllEnemies(): any {
+  for (let i = 0; i < numberOfEnemies; ++i) {
+    const enemyId = `X${i}`
+    findEnemyBestMove(enemyId)
+  }
+  return {
+    health: playerHealth,
+    maze: hideMazeFromPosition(gameMaze, findPlayer())
+  }
 }
 
 function findPlayer(): Position {
@@ -154,6 +172,7 @@ function findPlayer(): Position {
 function canMoveTo(entityCode: string, pos: Position): number {
   if (pos.x >= 0 && pos.x < gameMaze.length && pos.y >= 0 && pos.y < gameMaze[0].length) {
     if (gameMaze[pos.x][pos.y] === ".") return 1
+    if (entityCode.startsWith("X") && gameMaze[pos.x][pos.y] === "P") return -1
     if (entityCode !== "P") return 0
     if (gameMaze[pos.x][pos.y] === "S") return 2
     if (gameMaze[pos.x][pos.y] === "F") return 3
@@ -166,7 +185,7 @@ function moveEntity(entityCode: string, toMove: Position): any {
   playerPosition.x += toMove.x
   playerPosition.y += toMove.y
   const moveSuccess = canMoveTo(entityCode, playerPosition)
-  if (moveSuccess > 0 && (sisterSaved || moveSuccess !== 3)) {
+  if (moveSuccess === 1 || (entityCode === "P" && moveSuccess > 0 && (sisterSaved || moveSuccess !== 3))) {
     gameMaze[playerPosition.x][playerPosition.y] = gameMaze[playerPosition.x - toMove.x][playerPosition.y - toMove.y]
     gameMaze[playerPosition.x - toMove.x][playerPosition.y - toMove.y] = '.'
   }
