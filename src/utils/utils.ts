@@ -53,6 +53,7 @@ function generateHeuristics(maze: Array< Array< string > >) {
       }
     }
   }
+  return result
 }
 
 function initEnemies() {
