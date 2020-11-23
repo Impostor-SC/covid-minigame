@@ -56,7 +56,7 @@ function generateHeuristics(maze: Array< Array< string > >) {
   return result
 }
 
-function initEnemies() {
+export function initEnemies() {
   enemyDict = {}
   for (let i = 0; i < numberOfEnemies; ++i) {
     const enemyId = `X${i}`
@@ -150,49 +150,64 @@ export function moveAllEnemies(maze: Array< Array< string > >): Array< Array< st
       "heuristic": updateHeuristics(enemyId, newMaze)
     }
   }
-  return hideMazeFromPosition(gameMaze, findPlayer(gameMaze));
+  return hideMazeFromPosition(gameMaze, findPlayer());
 }
 
-function findPlayer(maze: Array< Array< string > >): Position {
-  return findEntity(maze, 'P')
+function findPlayer(): Position {
+  return findEntity(gameMaze, 'P')
 }
 
-export function playerMoveRight(maze: Array< Array< string > >): any {
-  // TODO: Buat algoritma untuk gerakin player ke kanan
+function canMoveTo(pos: Position): boolean {
+  return pos.x >= 0 && pos.x < gameMaze.length && pos.y >= 0 && pos.y < gameMaze[0].length
+}
+
+function moveEntity(entityCode: string, toMove: Position): any {
+  const playerPosition = findEntity(gameMaze, entityCode)
+  playerPosition.x += toMove.x
+  playerPosition.y += toMove.y
+  const moveSuccess = canMoveTo(playerPosition)
+  if (moveSuccess) {
+    gameMaze[playerPosition.x][playerPosition.y] = 'P'
+    gameMaze[playerPosition.x - toMove.x][playerPosition.y - toMove.y] = '.'
+  }
   return {
-    "success": true,
-    "maze": maze
+    "success": moveSuccess,
+    "maze": hideMazeFromPosition(gameMaze, findPlayer())
   }
 }
 
-export function playerMoveLeft(maze: Array< Array< string > >): any {
-  // TODO: Buat algoritma untuk gerakin player ke kiri
-  return {
-    "success": true,
-    "maze": maze
-  }
+export function playerMoveRight(): any {
+  return moveEntity('P', {
+    x: 0,
+    y: 1
+  })
 }
 
-export function playerMoveUp(maze: Array< Array< string > >): any {
-  // TODO: Buat algoritma untuk gerakin player ke atas
-  return {
-    "success": true,
-    "maze": maze
-  }
+export function playerMoveLeft(): any {
+  return moveEntity('P', {
+    x: 0,
+    y: -1
+  })
 }
 
-export function playerMoveDown(maze: Array< Array< string > >): any {
-  // TODO: Buat algoritma untuk gerakin player ke bawah
-  return {
-    "success": true,
-    "maze": maze
-  }
+export function playerMoveUp(): any {
+  return moveEntity('P', {
+    x: -1,
+    y: 0
+  })
 }
 
-export function playerShoot(maze: Array< Array< string > >): any {
+export function playerMoveDown(): any {
+  return moveEntity('P', {
+    x: 1,
+    y: 0
+  })
+}
+
+export function playerShoot(): any {
   // TODO: Buat algoritma untuk tembak sabun
   return {
     "success": true,
-    "maze": maze
+    "maze": gameMaze
   }
 }

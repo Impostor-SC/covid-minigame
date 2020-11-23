@@ -1,6 +1,7 @@
 import { Component, Host, Watch, h, State, Prop, getAssetPath } from '@stencil/core';
 import {
   generateMaze,
+  initEnemies,
   moveAllEnemies,
   playerMoveRight,
   playerMoveLeft,
@@ -32,16 +33,18 @@ export class StaySafeGame {
     let moveResult: any = {};
     console.log(ev) // DEBUG
     if (ev === "ArrowUp") {
-      moveResult = playerMoveUp(this.maze);
+      moveResult = playerMoveUp();
     } else if (ev === "ArrowRight") {
-      moveResult = playerMoveRight(this.maze);
+      moveResult = playerMoveRight();
     } else if (ev === "ArrowLeft") {
-      moveResult = playerMoveLeft(this.maze);
+      moveResult = playerMoveLeft();
     } else if (ev === "ArrowDown") {
-      moveResult = playerMoveDown(this.maze);
+      moveResult = playerMoveDown();
     } else if (ev === "Enter") {
-      moveResult = playerShoot(this.maze);
+      moveResult = playerShoot();
     }
+
+    console.log(moveResult)
 
     if (moveResult.success) {
       this.maze = moveAllEnemies(moveResult.maze);
@@ -59,6 +62,7 @@ export class StaySafeGame {
   @Watch('level')
   watchHandler(newValue: number, oldValue: number) {
     console.log("Hi " + newValue) // DEBUG
+    initEnemies()
     this.maze = generateMaze(newValue);
   }
 
