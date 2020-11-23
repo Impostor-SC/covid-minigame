@@ -5,6 +5,10 @@ import { Component, Host, h } from '@stencil/core';
   shadow: true,
 })
 export class LandingPage {
+  
+  startGame = () => {
+    this.route = "game";
+  }
 
   render() {
     return (
@@ -12,8 +16,7 @@ export class LandingPage {
         <div>
           <img src="./assets/coronavirus2.png"/>
           <h1>Stay Safe!</h1>
-          <button>PLAY</button>
-          
+          <button onClick={this.startGame}>Start</button>
         </div>
       </Host>
     );
