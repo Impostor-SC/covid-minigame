@@ -6,10 +6,18 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface LandingPage {
+    }
     interface StaySafeGame {
     }
 }
 declare global {
+    interface HTMLLandingPageElement extends Components.LandingPage, HTMLStencilElement {
+    }
+    var HTMLLandingPageElement: {
+        prototype: HTMLLandingPageElement;
+        new (): HTMLLandingPageElement;
+    };
     interface HTMLStaySafeGameElement extends Components.StaySafeGame, HTMLStencilElement {
     }
     var HTMLStaySafeGameElement: {
@@ -17,13 +25,17 @@ declare global {
         new (): HTMLStaySafeGameElement;
     };
     interface HTMLElementTagNameMap {
+        "landing-page": HTMLLandingPageElement;
         "stay-safe-game": HTMLStaySafeGameElement;
     }
 }
 declare namespace LocalJSX {
+    interface LandingPage {
+    }
     interface StaySafeGame {
     }
     interface IntrinsicElements {
+        "landing-page": LandingPage;
         "stay-safe-game": StaySafeGame;
     }
 }
@@ -31,6 +43,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "landing-page": LocalJSX.LandingPage & JSXBase.HTMLAttributes<HTMLLandingPageElement>;
             "stay-safe-game": LocalJSX.StaySafeGame & JSXBase.HTMLAttributes<HTMLStaySafeGameElement>;
         }
     }
