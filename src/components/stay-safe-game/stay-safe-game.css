@@ -18,6 +18,7 @@ table {
 
 table, td {
   vertical-align: middle;
+  border: 1px solid black;
 }
 
 td {
