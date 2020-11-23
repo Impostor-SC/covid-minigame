@@ -69,11 +69,14 @@ export class StaySafeGame {
             <table>
               {this.maze.map((row, idxRow) => (
                 <tr key={idxRow}>
-                  {row.map((cell, idxCell) => (
-                    <td key={idxCell}>
-                      {cell}
-                    </td>
-                  ))}
+                  {row.map((cell, idxCell) => {
+                    return (
+                      <td key={idxCell}>
+                        <img />
+                        {cell}
+                      </td>
+                    )
+                  })}
                 </tr>
               ))}
             </table>
