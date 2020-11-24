@@ -94,7 +94,7 @@ function hideMazeFromPosition(maze: Array< Array< string > >, position: Position
       }
     }
   }
-  return newMaze
+  return maze
 }
 
 function generateHeuristics(maze: Array< Array< string > >) {
@@ -169,7 +169,9 @@ export function generateMaze(level: number): Array< Array< string > > {
       if (arrEntity[0] === 'X') {
         gameMaze[row][col] += enemyCounter
         enemyCounter += 1
-        arrEntity.splice(0, 1)
+        if (enemyCounter === numberOfEnemies) {
+          arrEntity.splice(0, 1)
+        }
       } else if (arrEntity[0] === "#" && pWall > 0) {
         pWall--
       }
