@@ -14,7 +14,7 @@ export let numberOfEnemies = 0
 let sisterSaved: boolean
 let playerHealth: number
 
-const CHEAT_MODE = false
+const CHEAT_MODE = true
 
 const directionList = [
   {
@@ -254,8 +254,7 @@ export function generateMaze(level: number): Array< Array< string > > {
         let post = []
         post.push([randomChoiceIndex(4, gameMaze.length), randomChoiceIndex(0, 4 + oddAddition)])
         post.push([randomChoiceIndex(0, 4), randomChoiceIndex(gameMaze[0].length - 3 - oddAddition, gameMaze[0].length)])
-        post.push([randomChoiceIndex(0, gameMaze.length), 3 + 1 + oddAddition])
-        post.push([randomChoiceIndex(0, gameMaze.length), gameMaze[0].length - 3 - 1 - oddAddition])
+        post.push([randomChoiceIndex(0, gameMaze.length), randomChoiceIndex(3 + 1 + oddAddition, gameMaze[0].length - 3 - 1 - oddAddition)])
         let choice = randomChoiceIndex(0, post.length)
         row = post[choice][0]
         col = post[choice][1]
