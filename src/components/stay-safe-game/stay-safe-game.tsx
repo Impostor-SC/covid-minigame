@@ -6,7 +6,10 @@ import {
   playerMoveLeft,
   playerMoveUp,
   playerMoveDown,
-  playerShoot
+  playerShootLeft,
+  playerShootRight,
+  playerShootUp,
+  playerShootDown
 } from '../../utils/utils'
 
 @Component({
@@ -41,16 +44,22 @@ export class StaySafeGame {
     let ev = e.key || e.code;
     let moveResult: any = {};
     console.log(ev) // DEBUG
-    if (ev === "ArrowUp") {
+    if (ev === "w") {
       moveResult = playerMoveUp();
-    } else if (ev === "ArrowRight") {
+    } else if (ev === "d") {
       moveResult = playerMoveRight();
-    } else if (ev === "ArrowLeft") {
+    } else if (ev === "a") {
       moveResult = playerMoveLeft();
-    } else if (ev === "ArrowDown") {
+    } else if (ev === "s") {
       moveResult = playerMoveDown();
-    } else if (ev === "Enter") {
-      moveResult = playerShoot();
+    } else if (ev === "i") {
+      moveResult = playerShootUp();
+    } else if (ev === "j") {
+      moveResult = playerShootLeft();
+    } else if (ev === "k") {
+      moveResult = playerShootDown();
+    } else if (ev === "l") {
+      moveResult = playerShootRight();
     } else if (ev === " ") {
       moveResult = {
         success: 1,

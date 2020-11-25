@@ -9,8 +9,7 @@ let numberOfEnemies = 0
 let sisterSaved: boolean
 let playerHealth: number
 
-let width = 10;
-let height = 7;
+const CHEAT_MODE = false
 
 const directionList = [
   {
@@ -106,7 +105,7 @@ function generateHeuristics(maze: Array< Array< string > >, position: Position, 
     result.push([])
     for (let j = 0; j < maze[i].length; ++j) {
       if(maze[i][j] == "P"){
-        result[i].push(100)
+        result[i].push(1000)
       }
       else if(maze[i][j] == "#" || maze[i][j] == "S" || maze[i][j] == "F"){
         result[i].push(0)
@@ -157,6 +156,8 @@ export function generateMaze(level: number): Array< Array< string > > {
   let arrEntity = ["P", "F", "S", "X", "#"]
   let enemyCounter = 0
   numberOfEnemies = Math.floor((level + 4) / 5);
+  let width = 10;
+  let height = 7;
   let pWall = (20*width*height) / 100
 
   gameMaze = []
@@ -222,7 +223,7 @@ export function generateMaze(level: number): Array< Array< string > > {
   }
   
   initData()
-  return hideMazeFromPosition(gameMaze, findPlayer());
+  return CHEAT_MODE ? gameMaze : hideMazeFromPosition(gameMaze, findPlayer());
 }
 
 function getMoveScore(
@@ -244,6 +245,9 @@ function findEnemyBestMove(enemyId: string) {
   let heuristics = generateHeuristics(maze, findEntity(gameMaze, enemyId), enemyId)
   let possibleMoves = []
   let selectedMove = 0
+  let width = gameMaze[0].length
+  let height = gameMaze.length
+
   for(let i = 0; i < 4; i++){
     let newPosition = findEntity(gameMaze, enemyId)
     newPosition.x += directionList[i].x
@@ -284,22 +288,22 @@ function findEnemyBestMove(enemyId: string) {
         "score": getMoveScore(heuristics, topLeft, bottomRight)
       })
     }
+  }
 
-    let sumScore = 0
-    for(let possibleMove in possibleMoves){
-      sumScore += possibleMove["score"]
-    }
+  let sumScore = 0
+  for(let possibleMove of possibleMoves){
+    sumScore += possibleMove["score"]
+  }
 
-    if(sumScore == 0) break
+  if(sumScore == 0) return 0
 
-    let randomNumber = randomChoiceIndex(sumScore)
+  let randomNumber = randomChoiceIndex(0, sumScore)
 
-    for(let possibleMove in possibleMoves){
-      randomNumber -= possibleMove["score"]
-      if(randomNumber < 0){
-        selectedMove = possibleMove["moveIndex"]
-        break
-      }
+  for(let possibleMove of possibleMoves){
+    randomNumber -= possibleMove["score"]
+    if(randomNumber < 0){
+      selectedMove = possibleMove["moveIndex"]
+      break
     }
   }
 
@@ -316,7 +320,7 @@ export function moveAllEnemies(): any {
   }
   return {
     health: playerHealth,
-    maze: hideMazeFromPosition(gameMaze, findPlayer())
+    maze: CHEAT_MODE ? gameMaze : hideMazeFromPosition(gameMaze, findPlayer())
   }
 }
 
@@ -352,7 +356,7 @@ function moveEntity(entityCode: string, toMove: Position): any {
   }
   return {
     "success": moveSuccess,
-    "maze": hideMazeFromPosition(gameMaze, findPlayer())
+    "maze": CHEAT_MODE ? gameMaze : hideMazeFromPosition(gameMaze, findEntity(gameMaze, entityCode))
   }
 }
 
@@ -384,7 +388,31 @@ export function playerMoveDown(): any {
   })
 }
 
-export function playerShoot(): any {
+export function playerShootUp(): any {
+  // TODO: Buat algoritma untuk tembak sabun
+  return {
+    "success": true,
+    "maze": gameMaze
+  }
+}
+
+export function playerShootLeft(): any {
+  // TODO: Buat algoritma untuk tembak sabun
+  return {
+    "success": true,
+    "maze": gameMaze
+  }
+}
+
+export function playerShootDown(): any {
+  // TODO: Buat algoritma untuk tembak sabun
+  return {
+    "success": true,
+    "maze": gameMaze
+  }
+}
+
+export function playerShootRight(): any {
   // TODO: Buat algoritma untuk tembak sabun
   return {
     "success": true,
