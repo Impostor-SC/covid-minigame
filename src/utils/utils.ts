@@ -97,7 +97,7 @@ function hideMazeFromPosition(maze: Array< Array< string > >, position: Position
       }
     }
   }
-  return maze
+  return newMaze
 }
 
 function generateHeuristics(maze: Array< Array< string > >, position: Position, id: string) {
@@ -148,13 +148,13 @@ export function initData() {
   }
 }
 
-function randomChoiceIndex(choices) {
-  var index = Math.floor(Math.random() * choices.length);
+function randomChoiceIndex(a: number, b: number) {
+  var index = a + Math.floor(Math.random() * (b-a));
   return index;
 }
 
 export function generateMaze(level: number): Array< Array< string > > {
-  let arrEntity = ["X", "P", "F", "S", "#"]
+  let arrEntity = ["P", "F", "S", "X", "#"]
   let enemyCounter = 0
   numberOfEnemies = Math.floor((level + 4) / 5);
   let pWall = (20*width*height) / 100
@@ -173,12 +173,40 @@ export function generateMaze(level: number): Array< Array< string > > {
       break
     }
     else {
-      let row = randomChoiceIndex(gameMaze)
-      let col = randomChoiceIndex(gameMaze[row])
+      let ent = arrEntity[0]
+      let row = 0
+      let col = 0
+      let oddAddition = Math.floor((numberOfEnemies+1)/2 - 1)
+      let evenAddition = Math.floor((numberOfEnemies)/2 - 1)
+      if (ent === "P") {
+        row = randomChoiceIndex(0, 3)
+        col = randomChoiceIndex(0, 3 + oddAddition)
+      } else if (ent === "F") {
+        row = randomChoiceIndex(gameMaze.length - 3, gameMaze.length)
+        col = randomChoiceIndex(gameMaze[0].length - 3 - oddAddition, gameMaze[0].length)
+      } else if (ent === "S") {
+        row = randomChoiceIndex(0, gameMaze.length)
+        col = randomChoiceIndex(gameMaze[0].length/2 - 1 - evenAddition, gameMaze[0].length/2 + 1 + evenAddition)
+      } else if (ent === "X") {
+        let post = []
+        post.push([randomChoiceIndex(4, gameMaze.length), randomChoiceIndex(0, 4 + oddAddition)])
+        post.push([randomChoiceIndex(0, 4), randomChoiceIndex(gameMaze[0].length - 3 - oddAddition, gameMaze[0].length)])
+        post.push([randomChoiceIndex(0, gameMaze.length), 3 + 1 + oddAddition])
+        post.push([randomChoiceIndex(0, gameMaze.length), gameMaze[0].length - 3 - 1 - oddAddition])
+        let choice = randomChoiceIndex(0, post.length)
+        row = post[choice][0]
+        col = post[choice][1]
+      }
+      else {
+        row = randomChoiceIndex(0, gameMaze.length)
+        col = randomChoiceIndex(0, gameMaze[0].length)
+      }
+
       if (gameMaze[row][col] !== ".") {
         continue
       }
       gameMaze[row][col] = arrEntity[0]
+      
       if (arrEntity[0] === 'X') {
         gameMaze[row][col] += enemyCounter
         enemyCounter += 1
@@ -187,8 +215,7 @@ export function generateMaze(level: number): Array< Array< string > > {
         }
       } else if (arrEntity[0] === "#" && pWall > 0) {
         pWall--
-      }
-      else {
+      } else {
         arrEntity.splice(0, 1)
       }
     }
