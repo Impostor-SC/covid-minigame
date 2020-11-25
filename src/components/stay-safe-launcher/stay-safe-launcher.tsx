@@ -39,14 +39,14 @@ export class StaySafeLauncher {
         {this.route === "menu" ?
           <landing-page startGame={this.startGame} highestLevel={this.highestLevel}></landing-page>
         : this.route === "winscreen" ?
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", minHeight: "75vh", paddingTop: "15px" }}>
             <h2>You Win</h2>
-            <button onClick={this.startGame}>Continue</button>
+            <button onClick={this.startGame} style={{ backgroundColor: "#f2e7e7", color: "#795555", borderRadius: "18px", border: "none", padding: "8px 20px", cursor: "pointer" }}>Continue</button>
           </div>
         : this.route === "losescreen" ?
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", minHeight: "75vh", paddingTop: "15px" }}>
             <h2>You Lose</h2>
-            <button onClick={this.startGame}>Retry</button>
+            <button onClick={this.startGame} style={{ backgroundColor: "#f2e7e7", color: "#795555", borderRadius: "18px", border: "none", padding: "8px 20px", cursor: "pointer" }}>Retry</button>
           </div>
         :
           <stay-safe-game level={this.level} winEvent={this.winLevel} loseEvent={this.loseLevel} />
