@@ -1,6 +1,11 @@
 export class Position {
   x: number
   y: number
+
+  constructor(_x: number, _y: number){
+    this.x = _x
+    this.y = _y
+  }
 }
 
 let gameMaze: Array< Array< string > > = null
@@ -152,6 +157,63 @@ function randomChoiceIndex(a: number, b: number) {
   return index;
 }
 
+function isMazeValid(maze: Array< Array< string > >): boolean {
+  let queue = []
+  queue.push(findPlayer())
+
+  let visited = {}
+
+  let width = gameMaze[0].length
+  let height = gameMaze.length
+
+  while(queue.length > 0){
+    let pos = queue.pop()
+
+    for(let i = 0; i < 4; i++){
+      let newPos = new Position(pos.x + directionList[i].x, pos.y + directionList[i].y)
+      if(newPos.x < 0 || newPos.x >= height || newPos.y < 0 || newPos.y >= width)
+        continue
+      if(maze[newPos.x][newPos.y] == '#')
+        continue
+      if(visited[`${newPos.x}${newPos.y}`] == 1)
+        continue
+        visited[`${newPos.x}${newPos.y}`] = 1
+      queue.push(newPos)
+    }
+  }
+
+  let sisterPos = findEntity(maze, "S")
+
+  if(!visited[`${sisterPos.x}${sisterPos.y}`])
+    return false
+  
+  visited = {}
+  queue.push(sisterPos)
+
+  while(queue.length > 0){
+    let pos = queue.pop()
+
+    for(let i = 0; i < 4; i++){
+      let newPos = new Position(pos.x + directionList[i].x, pos.y + directionList[i].y)
+      if(newPos.x < 0 || newPos.x >= height || newPos.y < 0 || newPos.y >= width)
+        continue
+      if(maze[newPos.x][newPos.y] == '#')
+        continue
+      if(visited[`${newPos.x}${newPos.y}`] == 1)
+        continue
+        visited[`${newPos.x}${newPos.y}`] = 1
+      queue.push(newPos)
+    }
+  }
+
+  let finishPos = findEntity(maze, 'F')
+
+  if(!visited[`${finishPos.x}${finishPos.y}`])
+    return false
+
+  return true;
+}
+
 export function generateMaze(level: number): Array< Array< string > > {
   let arrEntity = ["P", "F", "S", "X", "#"]
   let enemyCounter = 0
@@ -221,6 +283,10 @@ export function generateMaze(level: number): Array< Array< string > > {
       }
     }
   }
+
+  if(!isMazeValid(gameMaze)){
+    return generateMaze(level)
+  }
   
   initData()
   return CHEAT_MODE ? gameMaze : hideMazeFromPosition(gameMaze, findPlayer());
@@ -253,8 +319,8 @@ function findEnemyBestMove(enemyId: string) {
     newPosition.x += directionList[i].x
     newPosition.y += directionList[i].y
 
-    let topLeft = new Position()
-    let bottomRight = new Position()
+    let topLeft = new Position(0, 0)
+    let bottomRight = new Position(0, 0)
 
     if(i == 0){
       topLeft.x = newPosition.x
