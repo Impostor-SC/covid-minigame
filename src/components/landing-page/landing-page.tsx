@@ -15,7 +15,7 @@ export class LandingPage {
       <Host>
         <div class="container">
           <div class="start">
-            <img class="img" src={getAssetPath(`./assets/coronavirus2.png`)} />
+            <img class="img" src={getAssetPath(`./assets/coronavirus.png`)} />
             <div class="sub-start">
               <h1>Stay Safe!</h1>
               <button class="start-btn" onClick={() => this.startGame()}>Start</button>
