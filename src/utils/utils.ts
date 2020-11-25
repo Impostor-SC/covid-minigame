@@ -4,10 +4,13 @@ export class Position {
 }
 
 let gameMaze: Array< Array< string > > = null
-let enemyDict: any = {}
+let enemyVisited: any = {}
 let numberOfEnemies = 0
 let sisterSaved: boolean
 let playerHealth: number
+
+let width = 10;
+let height = 7;
 
 const directionList = [
   {
@@ -97,20 +100,35 @@ function hideMazeFromPosition(maze: Array< Array< string > >, position: Position
   return maze
 }
 
-function generateHeuristics(maze: Array< Array< string > >) {
+function generateHeuristics(maze: Array< Array< string > >, position: Position, id: string) {
   let result = []
   for (let i = 0; i < maze.length; ++i) {
     result.push([])
     for (let j = 0; j < maze[i].length; ++j) {
-      switch(maze[i][j]) {
-        case '-':
-          result[i].push(10)
-          break
-        case '#':
-          result[i].push(0)
-          break
-        default:
-          result[i].push(1)
+      if(maze[i][j] == "P"){
+        result[i].push(100)
+      }
+      else if(maze[i][j] == "#" || maze[i][j] == "S" || maze[i][j] == "F"){
+        result[i].push(0)
+      }
+      else {
+        result[i].push(enemyVisited[id][i][j])
+      }
+    }
+  }
+  return result
+}
+
+function generateVisitedArray(maze: Array< Array< string > >, position: Position) {
+  let result = []
+  for (let i = 0; i < maze.length; ++i) {
+    result.push([])
+    for (let j = 0; j < maze[i].length; ++j) {
+      if(i == position.x && j == position.y){
+        result[i].push(0)
+      }
+      else{
+        result[i].push(1)
       }
     }
   }
@@ -121,15 +139,12 @@ export function initData() {
   playerHealth = 3
   sisterSaved = false
 
-  enemyDict = {}
+  enemyVisited = {}
   for (let i = 0; i < numberOfEnemies; ++i) {
     const enemyId = `X${i}`
     const enemyPosition = findEntity(gameMaze, enemyId)
     const newMaze = hideMazeFromPosition(gameMaze, enemyPosition)
-    enemyDict[enemyId] = {
-      "maze": newMaze,
-      "heuristic": generateHeuristics(newMaze)
-    }
+    enemyVisited[enemyId] = generateVisitedArray(newMaze, enemyPosition)
   }
 }
 
@@ -142,8 +157,6 @@ export function generateMaze(level: number): Array< Array< string > > {
   let arrEntity = ["X", "P", "F", "S", "#"]
   let enemyCounter = 0
   numberOfEnemies = Math.floor((level + 4) / 5);
-  let width = 10;
-  let height = 7;
   let pWall = (20*width*height) / 100
 
   gameMaze = []
@@ -183,17 +196,90 @@ export function generateMaze(level: number): Array< Array< string > > {
   
   initData()
   return hideMazeFromPosition(gameMaze, findPlayer());
-  // return gameMaze;
+}
+
+function getMoveScore(
+  heuristics: Array< Array< number > >, 
+  topLeft: Position, 
+  bottomRight: Position
+  ): number {
+  let score = 0
+  for(let i = topLeft.x; i <= bottomRight.x; i++){
+    for(let j = topLeft.y; j <= bottomRight.y; j++){
+      score += heuristics[i][j]
+    }
+  }
+  return score
 }
 
 function findEnemyBestMove(enemyId: string) {
-  const chosenMove = directionList[Math.floor(Math.random() * 4)]
-  const moveResult = moveEntity(enemyId, chosenMove)
-  if (moveResult.success > 0) {
-    enemyDict[enemyId].maze = hideMazeFromPosition(gameMaze, findEntity(gameMaze, enemyId))
-  } else if (moveResult.success === -1) {
-    playerHealth -= 1
+  let maze = hideMazeFromPosition(gameMaze, findEntity(gameMaze, enemyId))
+  let heuristics = generateHeuristics(maze, findEntity(gameMaze, enemyId), enemyId)
+  let possibleMoves = []
+  let selectedMove = 0
+  for(let i = 0; i < 4; i++){
+    let newPosition = findEntity(gameMaze, enemyId)
+    newPosition.x += directionList[i].x
+    newPosition.y += directionList[i].y
+
+    let topLeft = new Position()
+    let bottomRight = new Position()
+
+    if(i == 0){
+      topLeft.x = newPosition.x
+      bottomRight.x = height - 1
+      topLeft.y = 0
+      bottomRight.y = width - 1
+    }
+    else if(i == 1){
+      topLeft.x = 0
+      bottomRight.x = newPosition.x
+      topLeft.y = 0
+      bottomRight.y = width - 1
+    }
+    else if(i == 2){
+      topLeft.x = 0
+      bottomRight.x = height - 1
+      topLeft.y = newPosition.y
+      bottomRight.y = width - 1
+    }
+    else{
+      topLeft.x = 0
+      bottomRight.x = height - 1
+      topLeft.y = 0
+      bottomRight.y = newPosition.y
+    }
+
+    let canMove = canMoveTo(enemyId, newPosition)
+    if(canMove != 0){
+      possibleMoves.push({
+        "moveIndex": i,
+        "score": getMoveScore(heuristics, topLeft, bottomRight)
+      })
+    }
+
+    let sumScore = 0
+    for(let possibleMove in possibleMoves){
+      sumScore += possibleMove["score"]
+    }
+
+    if(sumScore == 0) break
+
+    let randomNumber = randomChoiceIndex(sumScore)
+
+    for(let possibleMove in possibleMoves){
+      randomNumber -= possibleMove["score"]
+      if(randomNumber < 0){
+        selectedMove = possibleMove["moveIndex"]
+        break
+      }
+    }
   }
+
+  const chosenMove = directionList[selectedMove]
+  moveEntity(enemyId, chosenMove)
+  let newPosition = findEntity(gameMaze, enemyId)
+  enemyVisited[enemyId][newPosition.x][newPosition.y] = 0
 }
 
 export function moveAllEnemies(): any {
@@ -233,6 +319,9 @@ function moveEntity(entityCode: string, toMove: Position): any {
   }
   if (moveSuccess === 2) {
     sisterSaved = true
+  }
+  if(moveSuccess == -1) {
+    playerHealth -= 1
   }
   return {
     "success": moveSuccess,
