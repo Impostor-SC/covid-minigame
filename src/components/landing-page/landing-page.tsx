@@ -8,6 +8,7 @@ import { Component, Host, h, State, getAssetPath, Prop } from '@stencil/core';
 export class LandingPage {
   @State() route: string = "menu";
   @Prop() startGame: Function;
+  @Prop() highestLevel: number;
 
   render() {
     return (
@@ -18,6 +19,7 @@ export class LandingPage {
             <div class="sub-start">
               <h1>Stay Safe!</h1>
               <button class="start-btn" onClick={() => this.startGame()}>Start</button>
+              <div>Personal Best: Level {this.highestLevel}</div>
             </div>
           </div>
 

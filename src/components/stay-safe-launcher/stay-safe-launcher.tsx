@@ -9,6 +9,14 @@ export class StaySafeLauncher {
 
   @State() level: number = 1;
   @State() route: string = "menu";
+  @State() highestLevel: number = 1
+
+  componentWillLoad() {
+    const savedLevel = localStorage.getItem("Stay Safe Highest Level")
+    if (savedLevel) {
+      this.highestLevel = Number(savedLevel)
+    }
+  }
 
   startGame = () => {
     this.route = "game";
@@ -17,6 +25,8 @@ export class StaySafeLauncher {
   winLevel = () => {
     this.route = "winscreen";
     this.level += 1;
+    this.highestLevel = Math.max(this.highestLevel, this.level)
+    localStorage.setItem("Stay Safe Highest Level", String(this.highestLevel))
   }
 
   loseLevel = () => {
@@ -27,7 +37,7 @@ export class StaySafeLauncher {
     return (
       <Host>
         {this.route === "menu" ?
-          <landing-page startGame={this.startGame}></landing-page>
+          <landing-page startGame={this.startGame} highestLevel={this.highestLevel}></landing-page>
         : this.route === "winscreen" ?
           <div style={{ textAlign: "center" }}>
             <h2>You Win</h2>

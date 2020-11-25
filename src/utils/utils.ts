@@ -14,7 +14,7 @@ export let numberOfEnemies = 0
 let sisterSaved: boolean
 let playerHealth: number
 
-const CHEAT_MODE = true
+const CHEAT_MODE = false
 
 const directionList = [
   {
