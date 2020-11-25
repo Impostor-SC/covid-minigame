@@ -1,4 +1,4 @@
-import { Component, Host, h, State, getAssetPath } from '@stencil/core';
+import { Component, Host, h, State, getAssetPath, Prop } from '@stencil/core';
 @Component({
   tag: 'landing-page',
   styleUrl: 'landing-page.css',
@@ -7,65 +7,81 @@ import { Component, Host, h, State, getAssetPath } from '@stencil/core';
 })
 export class LandingPage {
   @State() route: string = "menu";
-
-  startGame = () => {
-    this.route = "game";
-  }
+  @Prop() startGame: Function;
 
   render() {
     return (
       <Host>
-        <div>
-          <div class="row">
+        <div class="container">
+          <div class="start">
             <img class="img" src={getAssetPath(`./assets/coronavirus2.png`)} />
             <div class="sub-start">
               <h1>Stay Safe!</h1>
-              <button class="start-btn" onClick={this.startGame}>Start</button>
+              <button class="start-btn" onClick={() => this.startGame()}>Start</button>
             </div>
           </div>
 
-          <div class="row">
-            <div class="text-box">
-              <div class="text">
-                <h2 class="text-center">How To Play</h2>
-                <p>
-                  1. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eu varius lorem. Vivamus mattis turpis ut justo congue, at dictum diam maximus. Aenean tristique pellentesque massa vitae lobortis. <br></br>
-                  2. Suspendisse pellentesque mi quam, sollicitudin congue lacus auctor quisasda <br></br>
-                  3. Suspendisse condimentum, lectus sed dignissim malesuada, est sem tristique felis, sit amet ultrices arcu neque a augue. <br></br>
-                  4. Nunc quis nibh velit. Fusce gravida condimentum ex, vel tempor enim finibus non. Maecenas eu odio elit. Fusce eget luctus erat. <br></br>
-                  5. Vestibulum auctor convallis metus et suscipit. Cras cursus massa nec varius mollis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. <br></br>
-                  6. Nulla accumsan, lorem in blandit convallis, erat ex interdum mauris, sit amet consectetur mauris purus eu augue.</p>
-            </div>
-            </div>
-
-            <div class="text-box">
-              <div class="text">
-                  <h2 class="text-center">About</h2>
-                  <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eu varius lorem. Vivamus mattis turpis ut justo congue, at dictum diam maximus. Aenean tristique pellentesque massa vitae lobortis.
-                  Suspendisse pellentesque mi quam, sollicitudin congue lacus auctor quis.
-                  </p>
+          <div class="about-control">
+            <div class="about">
+              <div class="about-content">
+                <h2 class="text-center">About</h2>
+                <ul>
+                  <li>
+                    Goal dari game ini adalah menjemput adik perempuan player yang tersembunyi di map dan membawanya ke blok finish (home).
+                  </li>
+                  <li>
+                    Dalam perjalanan player mencari adik, akan ada musuh-musuh yang mengejar player dan akan menyerang player jika berada di blok yang sama. 
+                  </li>
+                  <li>
+                    Player dapat melihat dua blok di atas, bawah, kanan, kirinya, dan juga 1 blok diagonal di sekitarnya (seperti belah ketupat). Namun player tidak bisa melihat blok yang terhalang tembok.
+                  </li>
+                  <div class="vision-img"><img class="vision-img-size"src={getAssetPath(`./assets/vision.jpg`)} /></div>
+                  
+                  <li>
+                    Player diberikan 3 masker yang akan berkurang jika terserang oleh musuh. Jika masker habis dan player terserang lagi, maka player akan kalah.
+                  </li>
+                  <li>
+                    Player juga diberikan senjata (sabun) yang bisa ditembakkan ke musuh. Musuh akan mati jika terkena sabun. Jarak tembaknya adalah 2 blok dari blok player berdiri.
+                  </li>
+                  <li>
+                    Terdapat sabun di map dan player dapat mengambilnya
+                  </li>
+                </ul>
               </div>
             </div>
-          </div>
 
-          <div class="text-box">
-            <div class="text">
-              <h2 class="text-center">Controls</h2>
-              <div class="text-center item-center row">
-                <div >
-                  <img class="control-img" src={getAssetPath(`./assets/wsad.png`)} />
-                  <h3>Shoot</h3>
+
+            <div class="control-story">
+              <div class="story-container">
+                <div class="story">
+                    <div class="story-content">
+                      <h2 class="text-center">Story</h2>
+                      <p>
+                        Alghi adalah warga Garut yang sehat. Ia memiliki adik perempuan bernama Putri yang tinggal di Depok. Alghi hendak menjemput Putri dan membawanya ke Garut supaya Putri tidak terinfeksi covid. Depok merupakan zona merah covid, dimana banyak orang terinfeksi covid yang berjalan-jalan di luar rumah dan tidak mengisolasi dirinya. Mereka berniat menularkan virus corona ke semua orang. 
+                        Tolong bantu Alghi untuk menjemput Putri dan membawanya pulang ke zona aman dengan selamat!
+                      </p>
+                    </div>
                 </div>
-                
-                <div>
-                  <img class="control-img" src={getAssetPath(`./assets/arrow.png`)} />
-                  <h3>Movement</h3>
+              </div>
+
+              <div class="control">
+                <div class="control-content">
+                  <h2 class="text-center">Controls</h2>
+                  <div class= "control-keys">
+                    <div>
+                      <img class="control-img" src={getAssetPath(`./assets/wsad.png`)} />
+                      <h3 class="text-center">Movement</h3>
+                    </div>
+                    
+                    <div>
+                      <img class="control-img" src={getAssetPath(`./assets/shoot.png`)} />
+                      <h3 class="text-center">Shoot</h3>
+                    </div>
+                  </div>
                 </div>
-                
               </div>
             </div>
-          </div>
+          </div>       
         </div>
       </Host>
     );
