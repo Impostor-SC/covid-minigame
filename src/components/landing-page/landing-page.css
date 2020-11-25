@@ -1,0 +1,151 @@
+:host {
+  display: block;
+}
+
+.start {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.start-btn {
+  text-align: center;
+  padding-bottom: 1rem;
+  background-color: #f2e7e7;
+  border: none;
+  color: #795555;
+  padding: 5px 40px;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.about-control {
+  display: flex;
+  flex-direction: row;
+}
+.about {
+  border-radius: 25px;
+  background-color: #f2e7e7;
+  color: #795555;
+  margin: 1rem;
+  width: 50%;
+  margin-left: 1.5rem;
+}
+
+.about-content {
+  padding: 2rem;
+  padding-right: 4rem;
+}
+.vision-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.vision-img-size {
+  width: 15rem;
+}
+
+.control-story {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+.control {
+  border-radius: 25px;
+  background-color: #f2e7e7;
+  color: #795555;
+  margin: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-content {
+  padding: 1rem;
+  margin: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.control-keys {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-img {
+  margin-right: 2rem;
+  margin-left: 2rem;
+}
+
+.story {
+  border-radius: 25px;
+  background-color: #f2e7e7;
+  color: #795555;
+  margin: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.story-content {
+  padding: 1rem;
+  margin: 1rem;
+}
+
+@media only screen and (max-width: 820px) {
+  .about-control {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .about-content {
+    margin: 0.5rem;
+  }
+  .about {
+    width: 80%;
+  }
+
+  .control-story {
+    width: 80%;
+  }
+
+  .story {
+    margin: 0rem;
+  }
+
+  .control {
+    margin: 0rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .story-container {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .control-keys {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media only screen and (min-width: 820px) {
+  .container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+}

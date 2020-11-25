@@ -1,0 +1,79 @@
+:host {
+  display: block;
+}
+
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+@media only screen and (min-width: 860px) {
+  .content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+}
+.win-img {
+  width: 15rem;
+  height: 15rem;
+  margin: 2rem;
+}
+.next-btn {
+  text-align: center;
+  padding-bottom: 1rem;
+  background-color: #f2e7e7;
+  border: none;
+  color: #795555;
+  padding: 5px 40px;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.about {
+  border-radius: 25px;
+  background-color: #f2e7e7;
+  color: #795555;
+  margin: 3rem;
+  width: 50%;
+}
+
+.about-content {
+  padding: 2rem;
+  padding-right: 4rem;
+}
+.vision-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.vision-img-size {
+  width: 15rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.win-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media only screen and (max-width: 860px) {
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .about {
+    width: 85%;
+  }
+}

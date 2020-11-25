@@ -6,6 +6,16 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface FooterBar {
+    }
+    interface LandingPage {
+        "startGame": Function;
+    }
+    interface LoseScreen {
+        "startGame": Function;
+    }
+    interface NavBar {
+    }
     interface StaySafeGame {
         "level": number;
         "loseEvent": Function;
@@ -13,8 +23,35 @@ export namespace Components {
     }
     interface StaySafeLauncher {
     }
+    interface WinScreen {
+        "startGame": Function;
+    }
 }
 declare global {
+    interface HTMLFooterBarElement extends Components.FooterBar, HTMLStencilElement {
+    }
+    var HTMLFooterBarElement: {
+        prototype: HTMLFooterBarElement;
+        new (): HTMLFooterBarElement;
+    };
+    interface HTMLLandingPageElement extends Components.LandingPage, HTMLStencilElement {
+    }
+    var HTMLLandingPageElement: {
+        prototype: HTMLLandingPageElement;
+        new (): HTMLLandingPageElement;
+    };
+    interface HTMLLoseScreenElement extends Components.LoseScreen, HTMLStencilElement {
+    }
+    var HTMLLoseScreenElement: {
+        prototype: HTMLLoseScreenElement;
+        new (): HTMLLoseScreenElement;
+    };
+    interface HTMLNavBarElement extends Components.NavBar, HTMLStencilElement {
+    }
+    var HTMLNavBarElement: {
+        prototype: HTMLNavBarElement;
+        new (): HTMLNavBarElement;
+    };
     interface HTMLStaySafeGameElement extends Components.StaySafeGame, HTMLStencilElement {
     }
     var HTMLStaySafeGameElement: {
@@ -27,12 +64,33 @@ declare global {
         prototype: HTMLStaySafeLauncherElement;
         new (): HTMLStaySafeLauncherElement;
     };
+    interface HTMLWinScreenElement extends Components.WinScreen, HTMLStencilElement {
+    }
+    var HTMLWinScreenElement: {
+        prototype: HTMLWinScreenElement;
+        new (): HTMLWinScreenElement;
+    };
     interface HTMLElementTagNameMap {
+        "footer-bar": HTMLFooterBarElement;
+        "landing-page": HTMLLandingPageElement;
+        "lose-screen": HTMLLoseScreenElement;
+        "nav-bar": HTMLNavBarElement;
         "stay-safe-game": HTMLStaySafeGameElement;
         "stay-safe-launcher": HTMLStaySafeLauncherElement;
+        "win-screen": HTMLWinScreenElement;
     }
 }
 declare namespace LocalJSX {
+    interface FooterBar {
+    }
+    interface LandingPage {
+        "startGame"?: Function;
+    }
+    interface LoseScreen {
+        "startGame"?: Function;
+    }
+    interface NavBar {
+    }
     interface StaySafeGame {
         "level"?: number;
         "loseEvent"?: Function;
@@ -40,17 +98,30 @@ declare namespace LocalJSX {
     }
     interface StaySafeLauncher {
     }
+    interface WinScreen {
+        "startGame"?: Function;
+    }
     interface IntrinsicElements {
+        "footer-bar": FooterBar;
+        "landing-page": LandingPage;
+        "lose-screen": LoseScreen;
+        "nav-bar": NavBar;
         "stay-safe-game": StaySafeGame;
         "stay-safe-launcher": StaySafeLauncher;
+        "win-screen": WinScreen;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "footer-bar": LocalJSX.FooterBar & JSXBase.HTMLAttributes<HTMLFooterBarElement>;
+            "landing-page": LocalJSX.LandingPage & JSXBase.HTMLAttributes<HTMLLandingPageElement>;
+            "lose-screen": LocalJSX.LoseScreen & JSXBase.HTMLAttributes<HTMLLoseScreenElement>;
+            "nav-bar": LocalJSX.NavBar & JSXBase.HTMLAttributes<HTMLNavBarElement>;
             "stay-safe-game": LocalJSX.StaySafeGame & JSXBase.HTMLAttributes<HTMLStaySafeGameElement>;
             "stay-safe-launcher": LocalJSX.StaySafeLauncher & JSXBase.HTMLAttributes<HTMLStaySafeLauncherElement>;
+            "win-screen": LocalJSX.WinScreen & JSXBase.HTMLAttributes<HTMLWinScreenElement>;
         }
     }
 }

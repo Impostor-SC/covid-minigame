@@ -1,18 +1,18 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { StaySafeGame } from '../stay-safe-game';
+import { LandingPage } from '../landing-page';
 
-describe('stay-safe-game', () => {
+describe('landing-page', () => {
   it('renders', async () => {
     const page = await newSpecPage({
-      components: [StaySafeGame],
-      html: `<stay-safe-game></stay-safe-game>`,
+      components: [LandingPage],
+      html: `<landing-page></landing-page>`,
     });
     expect(page.root).toEqualHtml(`
-      <stay-safe-game> 
+      <landing-page>
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
-      </stay-safe-game>
+      </landing-page>
     `);
   });
 });

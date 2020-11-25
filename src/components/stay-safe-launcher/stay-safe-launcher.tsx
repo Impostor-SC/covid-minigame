@@ -27,10 +27,7 @@ export class StaySafeLauncher {
     return (
       <Host>
         {this.route === "menu" ?
-          <div style={{ textAlign: "center" }}>
-            <h1>Hello</h1>
-            <button onClick={this.startGame}>Start</button>
-          </div>
+          <landing-page startGame={this.startGame}></landing-page>
         : this.route === "winscreen" ?
           <div style={{ textAlign: "center" }}>
             <h2>You Win</h2>
