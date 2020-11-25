@@ -5,7 +5,7 @@ export class Position {
 
 let gameMaze: Array< Array< string > > = null
 let enemyVisited: any = {}
-let numberOfEnemies = 0
+export let numberOfEnemies = 0
 let sisterSaved: boolean
 let playerHealth: number
 
@@ -316,7 +316,9 @@ function findEnemyBestMove(enemyId: string) {
 export function moveAllEnemies(): any {
   for (let i = 0; i < numberOfEnemies; ++i) {
     const enemyId = `X${i}`
-    findEnemyBestMove(enemyId)
+    if (findEntity(gameMaze, enemyId)) {
+      findEnemyBestMove(enemyId)
+    }
   }
   return {
     health: playerHealth,
@@ -388,34 +390,49 @@ export function playerMoveDown(): any {
   })
 }
 
-export function playerShootUp(): any {
-  // TODO: Buat algoritma untuk tembak sabun
-  return {
-    "success": true,
-    "maze": gameMaze
+function shootEntity(from: Position, direction: Position): any {
+  const LINEOFSIGHT = 2
+  for (let i = 1; i <= LINEOFSIGHT; ++i) {
+    const x = from.x + direction.x * i
+    const y = from.y + direction.y * i
+    if (gameMaze[x][y].startsWith("X")) {
+      gameMaze[x][y] = "."
+      return {
+        "success": 12,
+        "maze": hideMazeFromPosition(gameMaze, findPlayer())
+      }
+    }
   }
+  return {
+    "success": 11,
+    "maze": hideMazeFromPosition(gameMaze, findPlayer())
+  }
+}
+
+export function playerShootUp(): any {
+  return shootEntity(findPlayer(), {
+    x: -1,
+    y: 0
+  })
 }
 
 export function playerShootLeft(): any {
-  // TODO: Buat algoritma untuk tembak sabun
-  return {
-    "success": true,
-    "maze": gameMaze
-  }
+  return shootEntity(findPlayer(), {
+    x: 0,
+    y: -1
+  })
 }
 
 export function playerShootDown(): any {
-  // TODO: Buat algoritma untuk tembak sabun
-  return {
-    "success": true,
-    "maze": gameMaze
-  }
+  return shootEntity(findPlayer(), {
+    x: 1,
+    y: 0
+  })
 }
 
 export function playerShootRight(): any {
-  // TODO: Buat algoritma untuk tembak sabun
-  return {
-    "success": true,
-    "maze": gameMaze
-  }
+  return shootEntity(findPlayer(), {
+    x: 0,
+    y: 1
+  })
 }
