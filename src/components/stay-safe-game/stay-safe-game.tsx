@@ -9,7 +9,8 @@ import {
   playerShootLeft,
   playerShootRight,
   playerShootUp,
-  playerShootDown
+  playerShootDown,
+  numberOfEnemies
 } from '../../utils/utils'
 
 @Component({
@@ -24,6 +25,7 @@ export class StaySafeGame {
   @State() status: number = 0;
   @State() gameInfo: string = "Your turn"
   @State() health: number = 3;
+  @State() ammo: number = 0;
   @State() sisterSaved: boolean = false;
   @Prop() winEvent: Function;
   @Prop() loseEvent: Function;
@@ -31,10 +33,10 @@ export class StaySafeGame {
   @State() maze: Array< Array< string > > = null;
 
   componentWillLoad() {
-    console.log("Hi " + this.level) // DEBUG
+    console.log("ComponentWillLoad()")
     this.maze = generateMaze(this.level);
+    this.ammo = numberOfEnemies
     console.log(this.maze)
-    console.log("HEYYYY")
   }
 
   recordUserKeystroke = (e: any) => {
@@ -43,7 +45,18 @@ export class StaySafeGame {
 
     let ev = e.key || e.code;
     let moveResult: any = {};
-    console.log(ev) // DEBUG
+    
+    // Check for Ammo
+    if (ev === "i" || ev === "j" || ev === "k" || ev === "l") {
+      if (this.ammo <= 0) {
+        this.gameInfo = "You are out of soap"
+        this.status = 0
+        return
+      }
+      this.ammo -= 1
+    }
+
+    // Check for movement or shoot
     if (ev === "w") {
       moveResult = playerMoveUp();
     } else if (ev === "d") {
@@ -70,10 +83,11 @@ export class StaySafeGame {
       return
     }
 
+    // Get result from the main algorithm
     if (moveResult.success > 0) {
       if (moveResult.success === 2) {
         this.sisterSaved = true
-        this.maze = moveResult.maze
+        this.gameInfo = "You found your sister. Enemy's turn"
       } else if (moveResult.success === 3) {
         if (this.sisterSaved) {
           this.maze = moveResult.maze
@@ -83,10 +97,14 @@ export class StaySafeGame {
           this.status = 0
           return
         }
+      } else if (moveResult.success === 11) {
+        this.gameInfo = "You missed. Enemy's turn"
+      } else if (moveResult.success === 12) {
+        this.gameInfo = "You hit an enemy. Enemy's turn"
       } else {
-        this.maze = moveResult.maze
+        this.gameInfo = "Enemy's turn"
       }
-      this.gameInfo = "Enemy's turn"
+      this.maze = moveResult.maze
       this.status = 2
       setTimeout(() => {
         const moveResult = moveAllEnemies()
@@ -134,13 +152,14 @@ export class StaySafeGame {
       <img class="icon" src={getAssetPath(`./assets/${this.icon[name[0]]}`)} />
       );
   }
+
   render() {
     console.log(this.maze)
     return (
       <Host>
         <div class="title">
           <h1>Stay Safe!</h1>
-          <h3>Level: {this.level}, Health: {this.health}, Sister: {this.sisterSaved ? "Saved" : "-"}</h3>
+          <h3>Level: {this.level}, Health: {this.health}, Soap: {this.ammo}, Sister: {this.sisterSaved ? "Saved" : "-"}</h3>
         </div>
         <div class="game-wrapper">
           {this.maze ?
