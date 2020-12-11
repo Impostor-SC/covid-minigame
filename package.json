@@ -1,7 +1,7 @@
 {
   "name": "covid-minigame",
-  "version": "0.0.1",
-  "description": "Stencil Component Starter",
+  "version": "0.1.0",
+  "description": "Turn-based minigame yang bercerita tentang seorang kakak yang mencari adiknya di tengah-tengah kota yang merupakan zona merah COVID-19",
   "main": "dist/index.cjs.js",
   "module": "dist/custom-elements/index.js",
   "es2015": "dist/esm/index.mjs",
