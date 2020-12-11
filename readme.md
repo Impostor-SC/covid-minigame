@@ -11,7 +11,7 @@ There are three strategies we recommend for using web components built with Sten
 
 ### Script tag
 
-- Put a script tag similar to this `<script src='https://unpkg.com/covid-minigame@0.2.0/dist/stay-safe-game.js'></script>` in the head of your index.html
+- Put a script tag similar to this `<script src='https://unpkg.com/covid-minigame@0.3.0/dist/stay-safe-game.js'></script>` in the head of your index.html
 - Then you can use the element anywhere in your template, JSX, html etc
 
 ### Node Modules
